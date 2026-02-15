@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { useRef } from 'react';
+import Image from 'next/image';
 
 // Luxury Animation Variants
 const fadeUpVariant = {
@@ -42,7 +43,9 @@ const ScrollReveal = ({ children, className = "" }: { children: React.ReactNode;
   );
 };
 
-// Hero Section
+// ============================================
+// ENHANCED HERO WITH PARALLAX IMAGES
+// ============================================
 const Hero = () => {
   const targetRef = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -50,22 +53,131 @@ const Hero = () => {
     offset: ["start start", "end start"]
   });
 
+  // Parallax transforms for different layers
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
+  
+  // Background images move at different speeds
+  const yImage1 = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
+  const yImage2 = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
+  const yImage3 = useTransform(scrollYProgress, [0, 1], ['0%', '20%']);
 
   return (
     <motion.section 
       ref={targetRef}
-      style={{ opacity, scale }}
+      style={{ opacity }}
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#0D0D0D]"
     >
-      {/* Atmospheric Background */}
-      <div className="absolute inset-0">
+      {/* ========================================
+          PARALLAX BACKGROUND IMAGES LAYER
+      ======================================== */}
+      
+      {/* Image 1 - Left Side (Portrait) */}
+      <motion.div
+        style={{ y: yImage1 }}
+        className="absolute left-0 top-0 w-[35%] h-full opacity-20"
+      >
+        <div className="relative w-full h-full">
+          {/* Replace '/images/fatima-portrait-1.jpg' with your actual image path */}
+          <Image
+            src="/images/fatima-portrait-1.jpg"
+            alt=""
+            fill
+            className="object-cover object-center"
+            priority
+          />
+          {/* Gradient overlay to blend with background */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#0D0D0D]/50 to-[#0D0D0D]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0D0D0D] via-transparent to-[#0D0D0D]" />
+        </div>
+      </motion.div>
+
+      {/* Image 2 - Right Side (Portrait) */}
+      <motion.div
+        style={{ y: yImage2 }}
+        className="absolute right-0 top-0 w-[35%] h-full opacity-20"
+      >
+        <div className="relative w-full h-full">
+          <Image
+            src="/images/fatima-portrait-2.jpg"
+            alt=""
+            fill
+            className="object-cover object-center"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-l from-transparent via-[#0D0D0D]/50 to-[#0D0D0D]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0D0D0D] via-transparent to-[#0D0D0D]" />
+        </div>
+      </motion.div>
+
+      {/* Image 3 - Center Background (Subtle, slower parallax) */}
+      <motion.div
+        style={{ y: yImage3, scale }}
+        className="absolute inset-0 opacity-10"
+      >
+        <div className="relative w-full h-full">
+          <Image
+            src="/images/fatima-portrait-3.jpg"
+            alt=""
+            fill
+            className="object-cover object-center"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-radial from-transparent via-[#0D0D0D]/60 to-[#0D0D0D]" />
+        </div>
+      </motion.div>
+
+      {/* Atmospheric Background Overlays */}
+      <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#B88A6A] opacity-5 blur-[120px] rounded-full" />
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#B88A6A] opacity-5 blur-[120px] rounded-full" />
       </div>
 
-      {/* Content */}
+      {/* Floating Image Elements (Optional subtle effect) */}
+      <motion.div
+        animate={{ 
+          y: [0, -20, 0],
+          opacity: [0.15, 0.25, 0.15]
+        }}
+        transition={{ 
+          duration: 8, 
+          repeat: Infinity,
+          ease: "easeInOut" 
+        }}
+        className="absolute top-1/4 right-[15%] w-32 h-40 rounded-2xl overflow-hidden"
+      >
+        <Image
+          src="/images/fatima-portrait-4.jpg"
+          alt=""
+          fill
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#B88A6A]/30 to-transparent" />
+      </motion.div>
+
+      <motion.div
+        animate={{ 
+          y: [0, 20, 0],
+          opacity: [0.15, 0.25, 0.15]
+        }}
+        transition={{ 
+          duration: 10, 
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 2
+        }}
+        className="absolute bottom-1/4 left-[15%] w-28 h-36 rounded-2xl overflow-hidden"
+      >
+        <Image
+          src="/images/fatima-portrait-5.jpg"
+          alt=""
+          fill
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#B88A6A]/30 to-transparent" />
+      </motion.div>
+
+      {/* Content (stays in center, on top) */}
       <motion.div 
         initial="hidden"
         animate="visible"
@@ -125,7 +237,7 @@ const Hero = () => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.5, duration: 1, repeat: Infinity, repeatType: "reverse" }}
-        className="absolute bottom-12 left-1/2 -translate-x-1/2"
+        className="absolute bottom-12 left-1/2 -translate-x-1/2 z-10"
       >
         <div className="w-[1px] h-16 bg-gradient-to-b from-[#B88A6A] to-transparent" />
       </motion.div>
@@ -163,51 +275,79 @@ const Manifesto = () => {
   );
 };
 
-// Visual Showcase Section
+// ============================================
+// ENHANCED VISUAL SHOWCASE WITH REAL IMAGES
+// ============================================
 const VisualShowcase = () => {
-  const images = [
-    { id: 1, size: 'large', position: 'left' },
-    { id: 2, size: 'small', position: 'right-top' },
-    { id: 3, size: 'small', position: 'right-bottom' },
-  ];
+  const targetRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: targetRef,
+    offset: ["start end", "end start"]
+  });
+
+  // Different parallax speeds for each image
+  const y1 = useTransform(scrollYProgress, [0, 1], ['0%', '20%']);
+  const y2 = useTransform(scrollYProgress, [0, 1], ['0%', '15%']);
+  const y3 = useTransform(scrollYProgress, [0, 1], ['0%', '25%']);
 
   return (
-    <section className="relative py-32 px-6 bg-[#141414]">
+    <section ref={targetRef} className="relative py-32 px-6 bg-[#141414] overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <ScrollReveal>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-            {/* Large Image Left */}
+            {/* Large Image Left - with parallax */}
             <motion.div
+              style={{ y: y1 }}
               whileHover={{ scale: 1.01 }}
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
               className="relative aspect-[3/4] rounded-3xl overflow-hidden bg-[#0D0D0D] shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
             >
+              <Image
+                src="/images/fatima-campaign-1.jpg"
+                alt="Fatima Bah Campaign"
+                fill
+                className="object-cover"
+              />
               <div className="absolute inset-0 bg-gradient-to-br from-[#B88A6A]/20 via-transparent to-transparent" />
-              <div className="absolute bottom-8 left-8 right-8">
+              <div className="absolute bottom-8 left-8 right-8 z-10">
                 <p className="text-[#F5EDE3] text-sm tracking-[0.2em] uppercase opacity-80">Campaign 01</p>
               </div>
             </motion.div>
 
-            {/* Stacked Images Right */}
+            {/* Stacked Images Right - with parallax */}
             <div className="flex flex-col gap-8 lg:gap-12">
               <motion.div
+                style={{ y: y2 }}
                 whileHover={{ scale: 1.01 }}
                 transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                 className="relative aspect-[4/3] rounded-3xl overflow-hidden bg-[#0D0D0D] shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
               >
+                <Image
+                  src="/images/fatima-editorial-2.jpg"
+                  alt="Fatima Bah Editorial"
+                  fill
+                  className="object-cover"
+                />
                 <div className="absolute inset-0 bg-gradient-to-br from-[#B88A6A]/20 via-transparent to-transparent" />
-                <div className="absolute bottom-6 left-6 right-6">
+                <div className="absolute bottom-6 left-6 right-6 z-10">
                   <p className="text-[#F5EDE3] text-sm tracking-[0.2em] uppercase opacity-80">Editorial 02</p>
                 </div>
               </motion.div>
 
               <motion.div
+                style={{ y: y3 }}
                 whileHover={{ scale: 1.01 }}
                 transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                 className="relative aspect-[4/3] rounded-3xl overflow-hidden bg-[#0D0D0D] shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
               >
+                <Image
+                  src="/images/fatima-collection-3.jpg"
+                  alt="Fatima Bah Collection"
+                  fill
+                  className="object-cover"
+                />
                 <div className="absolute inset-0 bg-gradient-to-br from-[#B88A6A]/20 via-transparent to-transparent" />
-                <div className="absolute bottom-6 left-6 right-6">
+                <div className="absolute bottom-6 left-6 right-6 z-10">
                   <p className="text-[#F5EDE3] text-sm tracking-[0.2em] uppercase opacity-80">Collection 03</p>
                 </div>
               </motion.div>
@@ -301,7 +441,6 @@ const PartnershipExperience = () => {
               transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
               className="group relative p-10 bg-[#0D0D0D] border border-[#B88A6A]/20 hover:border-[#B88A6A]/50 transition-all duration-500 rounded-2xl"
             >
-              {/* Glow Effect */}
               <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-[#B88A6A]/10 via-transparent to-transparent pointer-events-none" />
               
               <div className="relative z-10">
