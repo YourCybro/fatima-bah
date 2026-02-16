@@ -551,7 +551,7 @@ const FinalCTA = () => {
 
 // Footer
 const Footer = () => {
-  const socials = ['Instagram', 'TikTok', 'YouTube'];
+  const socials = ['Instagram', 'TikTok', 'YouTube', 'SnapChat'];
 
   return (
     <footer className="relative py-16 px-6 bg-[#0D0D0D] border-t border-[#B88A6A]/10">
@@ -561,7 +561,13 @@ const Footer = () => {
             {socials.map((social, index) => (
               <motion.a
                 key={index}
-                href="#"
+                href={
+                  social === 'Instagram' ? 'https://www.instagram.com/fbxxo/' :
+                  social === 'TikTok' ? 'https://www.tiktok.com/@fatimabahxo' :
+                  social === 'SnapChat' ? 'https://www.snapchat.com/add/fatimabahxo' :
+                  'https://www.youtube.com/@fatimaba'
+                }
+                target="_blank"
                 whileHover={{ y: -2 }}
                 className="text-[#D6BFAE] text-sm tracking-wider hover:text-[#B88A6A] transition-colors duration-300"
               >
