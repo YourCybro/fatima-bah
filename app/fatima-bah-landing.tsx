@@ -545,7 +545,7 @@ const FinalCTA = () => {
 
 // Footer
 const Footer = () => {
-  const socials = ['Instagram', 'TikTok', 'YouTube', 'SnapChat'];
+  const socials = ['Instagram', 'TikTok', 'YouTube', 'SnapChat', 'ShopLtk'];
 
   return (
     <footer className="relative py-16 px-6 bg-[#0D0D0D] border-t border-[#B88A6A]/10">
@@ -559,6 +559,7 @@ const Footer = () => {
                   social === 'Instagram' ? 'https://www.instagram.com/fbxxo/' :
                   social === 'TikTok' ? 'https://www.tiktok.com/@fatimabahxo' :
                   social === 'SnapChat' ? 'https://www.snapchat.com/add/fatimabahxo' :
+                  social === 'ShopLtk' ? 'https://www.shopltk.com/explore/fbxxo' :
                   'https://www.youtube.com/@fatimaba'
                 }
                 target="_blank"
